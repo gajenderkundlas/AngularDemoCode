@@ -1,0 +1,314 @@
+<section class="content" style="margin:0px; padding:0px">
+  <div class="row" style="margin:0px; background-color:#fff; padding:0px;">
+    <div class="box box-primary">
+      <div #header class="box-header with-border">
+        <div class="form-row">
+          <div class="col-sm-12">
+            <h1 class="box-title"><i class="fa fa-wpforms" aria-hidden="true"></i> Accounts</h1>
+          </div>
+        </div>
+      </div>
+      <div class="box-body">
+        <div *ngIf="View=='add'">
+          <form [formGroup]="AccountForm" class="form-horizontal">
+            <ul class="nav nav-tabs">
+              <li [ngClass]="TabAccount"><a href="javascript:void(0)" (click)="ChangeTab('Accounts');">Account Details</a></li>
+              <li [ngClass]="TabAddress"><a href="javascript:void(0)" (click)="ChangeTab('Address');">Mailing Address</a></li>
+              <li [ngClass]="TabRegistration"><a href="javascript:void(0)" (click)="ChangeTab('Registration');">Tax Registration Details</a></li>
+              <li [ngClass]="TabOpening"><a href="javascript:void(0)" (click)="ChangeTab('Opening');">Opening Balance Details</a></li>
+              <li></li>
+            </ul>
+            <div class="tab-content">
+              <div id="home" [ngClass]="TabAccount" class="tab-pane fade">
+                <div class="form-group">
+                  <label class="control-label col-sm-10 text-info">
+                    All <span class="red">&nbsp;*&nbsp;</span> marked fields are required fields.Save button
+                    will be enable automatically after filling the required fields.
+                  </label>
+                  <div class="col-sm-2">
+                  </div>
+                </div>
+                <div class="form-group required">
+                  <label class="control-label col-sm-2">Account Name</label>
+                  <div class="col-sm-4">
+                    <input class=" form-control input-sm" [(ngModel)]="AccountEdit.accName" (change)="SetName()" type="text" formControlName="AccountName" placeholder="Please enter account name." />
+                    <div *ngIf="AccountForm.controls.AccountName.invalid && (AccountForm.controls.AccountName.dirty || AccountForm.controls.AccountName.touched)" class="alert alert-danger">
+                      <div [hidden]="!AccountForm.controls.AccountName.errors.required">
+                        Account Name is required field!
+                      </div>
+                    </div>
+                  </div>
+                  <label class="control-label col-sm-2">Account Type</label>
+                  <div class="col-sm-4">
+                    <select class="form-control input-sm" [(ngModel)]="AccountEdit.accType" type="text" formControlName="AccountType" placeholder="Please enter account type.">
+                      <option value="Supplier">Supplier</option>
+                      <option value="Customer">Customer</option>
+                      <option value="Bank">Bank</option>
+                      <option value="Credit">Credit</option>
+                      <option value="Supplier And Customer">Supplier And Customer</option>
+                      <option value="Job Worker">Job Worker</option>
+                      <option value="Account">Account</option>
+                    </select>
+                    <div *ngIf="AccountForm.controls.AccountType.invalid && (AccountForm.controls.AccountType.dirty || AccountForm.controls.AccountType.touched)" class="alert alert-danger">
+                      <div [hidden]="!AccountForm.controls.AccountType.errors.required">
+                        Account Type is required field!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group required">
+                  <label class="control-label col-sm-2">Under Group</label>
+                  <div class="col-sm-4">
+                    <p-dropdown [options]="UnderGroupData"  (onChange)="GetPrimaryGroup($event)" [style]="{width:'25em'}" [panelStyle]="{minWidth:'25em'}"  formControlName="UnderGroup" [filter]="true" resetFilterOnHide="true" filterBy="label" appendTo="body"></p-dropdown>
+                    <div *ngIf="AccountForm.controls.UnderGroup.errors && (AccountForm.controls.UnderGroup.dirty || AccountForm.controls.UnderGroup.touched)" class="alert alert-danger">
+                      <div [hidden]="!AccountForm.controls.UnderGroup.errors.required">
+                        Under group is required field!
+                      </div>
+                    </div>
+                  </div>
+                  <label class="control-label col-sm-2">Primary Group</label>
+                  <div class="col-sm-4">
+                    <p-multiSelect [options]="PrimaryGroupData" (onChange)="PrimaryGroupSelectChange($event)" [(ngModel)]="PrimaryGroupDataSelectedIds" formControlName="PrimaryGroup" appendTo="body" [style]="{width:'25em'}" defaultLabel="--Select Primary Group--" [panelStyle]="{minWidth:'25em'}">
+                    </p-multiSelect>
+                    <div *ngIf="AccountForm.controls.PrimaryGroup.errors && (AccountForm.controls.PrimaryGroup.dirty || AccountForm.controls.PrimaryGroup.touched)" class="alert alert-danger">
+                      <div [hidden]="!AccountForm.controls.PrimaryGroup.errors.required">
+                        Primary group is required field!
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Ledger Code</label>
+                  <div class="col-sm-4">
+                    <input class="form-control input-sm" [(ngModel)]="AccountEdit.ledgercode" type="text" formControlName="LedgerCode" placeholder="Please enter ledger code." />
+                  </div>
+                  <label class="control-label col-sm-2">Description</label>
+                  <div class="col-sm-4">
+                    <textarea rows="3" cols="3" class="form-control input-sm" [(ngModel)]="AccountEdit.description" type="text" formControlName="Description"></textarea>
+                  </div>
+                </div>
+                <div class="form-group required">
+                  <label class="control-label col-sm-2">Is Active</label>
+                  <div class="col-sm-4">
+                    <input type="checkbox" [(ngModel)]="AccountEdit.isActive" formControlName="IsActive" class="checkbox input-sm" checked="checked" />
+                  </div>
+                </div>
+              </div>
+              <div id="Address" [ngClass]="TabAddress" class="tab-pane fade">
+                <div class="form-group">
+                 <span></span>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Name</label>
+                  <div class="col-sm-4">
+                    <input class=" form-control input-sm" [(ngModel)]="AccountEdit.name" type="text" formControlName="Name" placeholder="Please enter name." />
+                  </div>
+                  <label class="control-label col-sm-2">Address</label>
+                  <div class="col-sm-4">
+                     <textarea rows="3" cols="3" class="form-control input-sm" [(ngModel)]="AccountEdit.address" formControlName="Address"></textarea> 
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">State</label>
+                  <div class="col-sm-4">
+                    <p-dropdown [options]="StateData" (onChange)="GetCity($event)" [style]="{width:'25em'}" [panelStyle]="{minWidth:'25em'}" formControlName="State"  [filter]="true" resetFilterOnHide="true" filterBy="label" appendTo="body"></p-dropdown>
+                  </div>
+                  <label class="control-label col-sm-2">City</label>
+                  <div class="col-sm-4">
+                    <p-dropdown [options]="CityData" [style]="{width:'25em'}" (onChange)="ChangeCity($event)" [panelStyle]="{minWidth:'25em'}" formControlName="City"  [filter]="true" resetFilterOnHide="true" filterBy="label" appendTo="body"></p-dropdown>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Pincode</label>
+                  <div class="col-sm-4">
+                    <input type="number" [(ngModel)]="AccountEdit.pincode" class="form-control input-sm" formControlName="Pincode"/>
+                  </div>
+                  <label class="control-label col-sm-2">Mobile No.</label>
+                  <div class="col-sm-4">
+                    <div class="input-group">
+                      <span class="input-group-addon">+91</span><input class=" form-control input-sm" [(ngModel)]="AccountEdit.mobileNo" type="number" formControlName="MobileNo" placeholder="Please enter 10 digit mobile no." />
+                      <div *ngIf="AccountForm.controls.MobileNo.invalid && (AccountForm.controls.MobileNo.dirty || AccountForm.controls.MobileNo.touched)" class="alert alert-danger">
+                        <div [hidden]="AccountForm.controls.MobileNo.errors && !AccountForm.controls.MobileNo.errors.IsNumber">
+                          Mobile no. must be a number!
+                        </div>
+                        <div [hidden]="AccountForm.controls.MobileNo.errors && !AccountForm.controls.MobileNo.errors.NumberInRange">
+                          Mobile no. should have 10 digit. Please do not use +91 or 0!
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Email</label>
+                  <div class="col-sm-4">
+                    <input type="email" [(ngModel)]="AccountEdit.email" class="form-control input-sm" formControlName="Email" />
+                    <div *ngIf="AccountForm.controls.Email.invalid && (AccountForm.controls.Email.dirty || AccountForm.controls.Email.touched)" class="alert alert-danger">
+                      <div [hidden]="AccountForm.controls.Email.errors && !AccountForm.controls.Email.errors.IsEmail">
+                        Please enter valid email.
+                      </div>
+                    </div>
+                  </div>
+                  <label class="control-label col-sm-2">Fax No.</label>
+                  <div class="col-sm-4">
+                    <input type="text" [(ngModel)]="AccountEdit.faxNo" class="form-control input-sm" formControlName="FaxNo" />
+                  </div>
+                </div>
+              </div>
+              <div id="Registration" [ngClass]="TabRegistration" class="tab-pane fade">
+                <div class="form-group">
+                  <span></span>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">PAN No.</label>
+                  <div class="col-sm-4">
+                    <input type="text" [(ngModel)]="AccountEdit.panNo" class="form-control input-sm" formControlName="PanNo" />
+                  </div>
+                </div>
+              </div>
+              <div id="Opening" [ngClass]="TabOpening" class="tab-pane fade">
+                <div class="form-group">
+                  <span></span>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Financial Year</label>
+                  <div class="col-sm-4">
+                    <p-dropdown [options]="FinancialYearData" (onChange)="FinancialYearChange($event)" [style]="{width:'25em'}" [panelStyle]="{minWidth:'25em'}" formControlName="FinancialYear" [filter]="true" resetFilterOnHide="true" filterBy="label" appendTo="body"></p-dropdown>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <p-dataTable [value]="PrimaryGroupOBData" [responsive]="true" [style]="{'text-align':'center'}">
+                    <p-column field="groupName" header="Primary Group Name"></p-column>
+                    <p-column field="openingBalance" header="Opening Balance">
+                      <ng-template pTemplate="header">
+                        Opening Balance
+                      </ng-template>
+                      <ng-template let-group="rowData" let-i="rowIndex" pTemplate="body">
+                        <div formArrayName="OpeningBalance">
+                          <input type="number" class="form-control input-sm text-right" formControlName="{{i}}" />
+                        </div>
+                      </ng-template>
+                    </p-column>
+                    <p-column field="balanceType" header="Balance Type">
+                      <ng-template pTemplate="header">
+                        Balance Type
+                      </ng-template>
+                      <ng-template let-group="rowData" let-i="rowIndex" pTemplate="body">
+                        <div formArrayName="BalanceType">
+                          <select class="form-control input-sm" formControlName="{{i}}">
+                            <option value="C">Credit</option>
+                            <option value="D">Debit</option>
+                          </select>
+                        </div>
+                      </ng-template>
+                    </p-column>
+                 
+                  </p-dataTable>
+                </div>
+                <!--<div class="form-group">
+                  <label class="control-label col-sm-2">Opening Balance</label>
+                  <div class="col-sm-4">
+                    <input type="number" [(ngModel)]="AccountEdit.openbal" class="form-control input-sm text-right" formControlName="OpenBal" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Balance Type</label>
+                  <div class="col-sm-4">
+                     <select  class="form-control input-sm" [(ngModel)]="AccountEdit.baltype" formControlName="BalType">
+                       <option value="C">Credit</option>
+                       <option value="D">Debit</option>
+                     </select>
+                  </div>
+                </div>-->
+                
+              </div>
+            </div>
+          </form>
+        </div>
+            <div *ngIf="View=='list'" class="form-horizontal">
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="search_input" [(ngModel)]="SearchView.globalFilter" placeholder="Search By Account Name...." />
+                    <div class="input-group-btn">
+                      <button (click)="Search()" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+                      <button *ngIf="session.AddPermission" (click)="Add();" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+                      <button *ngIf="session.DeletePermission" (click)="Delete(0);" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                      <button *ngIf="session.PrintPermission" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="Download('excel');"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Dowload Excel File</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="Download('pdf');"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Download Pdf File</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="Download('text');"><i class="fa fa-file-text" aria-hidden="true"></i> Download text File</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a class="dropdown-item" href="javascript:void(0)" (click)="SendFile()"><i class="fa fa-envelope-o" aria-hidden="true"></i> Send File In Email</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <div class="table-responsive">
+                    <p-dataTable [value]="AccountData" [(selection)]="selectedIds" [responsive]="true" [stacked]="stacked" [totalRecords]="TotalRecords" [lazy]="true" (onLazyLoad)="LoadAccounts($event)" [style]="{'text-align':'center','margin-bottom':'80px'}" paginator="true" rows="10" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]">
+                      <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+                      <p-column styleClass="col-button" header="Action">
+                        <ng-template pTemplate="header">
+                          Action
+                        </ng-template>
+                        <ng-template pTemplate="body" let-acc="rowData">
+                          <button *ngIf="session.DeletePermission" (click)="Delete(acc.accId)"><i class="fa fa-trash-o label-danger"></i></button>
+                          <button *ngIf="session.EditPermission" (click)="Edit(acc.accId)"><i class="fa fa-edit"></i></button>
+                        </ng-template>
+                      </p-column>
+                      <p-column header="S.No.">
+                        <ng-template pTemplate="header">
+                          S.No.
+                        </ng-template>
+                        <ng-template let-i="rowIndex" pTemplate="body">
+                          {{i+1}}
+                        </ng-template>
+                      </p-column>
+                      <p-column field="accName" header="Account Name"></p-column>
+                      <p-column field="accType" header="Account Type"></p-column>
+                      <p-column header="Primary Group">
+                        <ng-template pTemplate="header">
+                          Primary Group
+                        </ng-template>
+                        <ng-template let-group="rowData" pTemplate="body">
+                          <div *ngFor="let group of group.pGroupId">{{group.groupName}}</div>
+                        </ng-template>
+                      </p-column>
+                      <p-column field="underGroupName" header="Under Group Name"></p-column>
+                      <p-column header="Is Active">
+                        <ng-template pTemplate="header">
+                          Is Active
+                        </ng-template>
+                        <ng-template let-group="rowData" pTemplate="body">
+                          <span *ngIf="group.isActive==true" class="label label-success">Yes</span>
+                          <span *ngIf="group.isActive!=true" class="label label-danger">No</span>
+                        </ng-template>
+                      </p-column>
+                      <p-footerColumnGroup>
+                        <p-row>
+                          <p-column footer="Total Records :" colspan="2" [style]="{'text-align':'left'}"></p-column>
+                          <p-column footer="{{TotalRecords}}" colspan="6" [style]="{'text-align':'left'}"></p-column>
+                        </p-row>
+                      </p-footerColumnGroup>
+                    </p-dataTable>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <app-email *ngIf="View=='email'" [SearchView]="SearchView" (SearchViewChange)="SendEmail($event)" (SearchViewCancel)="Cancel($event);">
+            </app-email>
+          </div>
+          <div #footer class="box-footer">
+            <div *ngIf="View=='add'">
+              <button [disabled]="AccountForm.invalid" (click)="Save()" class="btn btn-success btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+              <button (click)="Cancel($event);" class="btn btn-default btn-sm"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+            </div>
+          </div>
+        </div>
+  </div>
+</section>
